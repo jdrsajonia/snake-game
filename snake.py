@@ -36,11 +36,10 @@ class node:
         
 class snakeObject:
     def __init__(self):
+        
         self.long=1
-        self.pos_x=0
-        self.pos_y=0
 
-        self.head=self.get_position()
+        self.head=node((0,0))
         self.tail=None
 
         self.keys={ 
@@ -59,11 +58,11 @@ class snakeObject:
     def get_direction(self, key:str):
         return self.keys[key]
 
-    def set_position(self, coordenates:tuple):
-        self.pos_x, self.pos_y = coordenates
-
+    def set_position(self, coordenates: tuple):
+        self.head.set_position(coordenates)
+    
     def get_position(self):
-        return self.pos_x, self.pos_y
+        return self.head.get_position()
     
     def move_to(self, direction_key:str):
         actual_position=self.get_position()
