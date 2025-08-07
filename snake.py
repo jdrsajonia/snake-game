@@ -1,5 +1,8 @@
 import os
-import queue
+import random
+import time
+from collections import deque
+# usar append y popleft
 
 
 def generate_matrix(row:int,column:int):
@@ -7,6 +10,16 @@ def generate_matrix(row:int,column:int):
     matrix=[rows.copy() for j in range(column)]
     return matrix
 
+def put_apple(matrix):
+
+    column=len(matrix)
+    row=len(matrix[0])
+
+    random_x=random.randint(1, column-1)
+    random_y=random.randint(1,row-1)
+    # apple=node(random_x,random_y)
+    # apple.set_type("W")
+    matrix[random_y][random_x]="W"
 
 def print_matrix(matrix):
     x=len(matrix)
@@ -15,6 +28,17 @@ def print_matrix(matrix):
         for j in range(y):
             print(matrix[i][j], end=" ")
         print()
+
+
+# def update_matrix(matrix):
+#     row=len(matrix[0])
+#     column=len(matrix)
+#     for i in range(column):
+#         for j in range(row):
+#             if (i,j) in 
+#             matrix[i][j]="O"
+#     pass
+
 
 
 
@@ -36,11 +60,15 @@ class node:
         
 class snakeObject:
     def __init__(self):
-        
+
         self.long=1
 
+        self.body=deque()
+
         self.head=node((0,0))
-        self.tail=None
+        self.body.append(self.head.get_position())
+
+        # self.tail=node((0,0))
 
         self.keys={ 
                     "w":(-1,0),     # arriba
@@ -64,49 +92,120 @@ class snakeObject:
     def get_position(self):
         return self.head.get_position()
     
-    def move_to(self, direction_key:str):
+
+
+    def move_to(self, direction_key:str, crecer=False):
+
         actual_position=self.get_position()
-        direction=self.keys[direction_key]
-        new_position=self._sum_vectors(actual_position,direction)
+
+        
+
+
+        # pedazo de codigo de prueba
+        if crecer:
+            self.increment()
+            pass
+        # borrar despues
+        
+
+        new_position=self._sum_vectors(actual_position,self.keys[direction_key])
+        
+        self.detect_colition(new_position)
+        self.body.pop()     # eliminar punta de la cola
+
+        
+
         self.set_position(new_position)
+
+        self.body.appendleft(new_position)
+        pass
+    
+
+    def increment(self):
+        self.long+=1
+
+        # al incrementar, necesitamos añadir la posicion actual DE LA COLA
+
+        tail_position=self.body[0]
+
+        self.body.append(tail_position)
+        pass
+
+    def detect_colition(self, new_coordenate):
+        if new_coordenate in self.body:
+            raise ValueError("LA SERPIENTE HA CHOCADO CON SU PROPIO CUERPO!!!")
+
         pass
 
 
 
-def move_test():
+def print_matrix_snake(matrix, snake: snakeObject):
+    x=len(matrix)
+    y=len(matrix[0])
+    for i in range(x):
+        for j in range(y):
+            
+            coordenate=(i,j)
+            if coordenate in snake.body:
+                print("S", end=" ")
+            else:
+                print(matrix[i][j], end=" ")
+           
+        print()
 
-    matrix=generate_matrix(10,10)
+
+# def move_test():
+
+#     matrix=generate_matrix(10,10)
+#     put_apple(matrix)
+#     snake=snakeObject()
+
+#     init_position=snake.get_position()
+#     x,y=init_position
+
+#     matrix[x][y]="S"
+
     
+#     while True:
+        
+#         print_matrix(matrix)
+#         input_direction=input("(W A S D) >> ")
+#         input_crecer=bool(int(input("True/False (1/0) >> ")))
+
+#         old_position=snake.get_position()
+
+#         snake.move_to(input_direction, input_crecer)
+        
+#         actual_position=snake.get_position()
+
+#         x,y=old_position
+#         matrix[x][y]="-"
+
+#         x,y=actual_position
+#         matrix[x][y]="S"
+
+
+#         os.system("cls")
+
+#         print(x,y)
+#         print(snake.body)
+
+
+def move_test_v2():
+    matrix=generate_matrix(10,10)
     snake=snakeObject()
 
-    init_position=snake.get_position()
-    x,y=init_position
-
-    matrix[x][y]="S"
-
-    
     while True:
-        
-        print_matrix(matrix)
+        print(snake.body)
+        print_matrix_snake(matrix, snake)
         input_direction=input("(W A S D) >> ")
+        input_crecer=bool(int(input("True/False (1/0) >> ")))
 
-        old_position=snake.get_position()
-
-        snake.move_to(input_direction)
-        
-        actual_position=snake.get_position()
-
-        x,y=old_position
-        matrix[x][y]="-"
-
-        x,y=actual_position
-        matrix[x][y]="S"
-
-
+        snake.move_to(input_direction, input_crecer)
         os.system("cls")
+        
+    pass
 
-        print(x,y)
 
-
-
-move_test()
+# move_test()
+move_test_v2()
