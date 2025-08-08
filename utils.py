@@ -2,8 +2,28 @@ import os
 import random
 import time
 from collections import deque
+from pynput import keyboard
+# import threading
 
+keys={ 
+        "w":(-1,0),     # arriba
+        "a":(0,-1),     # izquierda
+        "s":(1,0),      # abajo
+        "d":(0,1)       # derecha
+        }
 
+last_key="d"
+
+def on_press(key):
+    global last_key
+    try: 
+        new_key=key.char.lower()
+        if new_key in ("w","a","s","d"):
+            direction=new_key
+    except AttributeError:
+        pass
+
+listener=keyboard.Listener(on_press=on_press)
 
 class node:
     # probablemente quitar esta clase, ya que solo estamos trabajando con coordenadas
@@ -23,7 +43,7 @@ class node:
 
         
 class snakeObject:
-    def __init__(self):
+    def __init__(self, board_config_dimension: tuple=(10,10)):
 
         self.long=1
 
@@ -33,6 +53,8 @@ class snakeObject:
         self.body.append(self.head.get_position())
 
         # self.tail=node((0,0))
+
+        self.board_config_x, self.board_config_y = board_config_dimension
 
         self.keys={ 
                     "w":(-1,0),     # arriba
@@ -59,15 +81,10 @@ class snakeObject:
     def get_head_position(self):
         return self.head.get_position()
     
-
-    def detectar_manzana(): #??
-        pass
-
     def move_to(self, direction_key:str, grow_up=False):
         actual_position=self.get_head_position()
 
         current_direction=self.get_direction(direction_key) #la ultima direccion se actualiza aqui
-
 
         # aqui se podría incrementar el tamaño
         if grow_up:
@@ -75,24 +92,23 @@ class snakeObject:
 
         new_position=self._sum_vectors(actual_position,current_direction)
         self.detect_colition(new_position)
-        
-        self.body.pop()     # eliminar punta de la cola
+       
+        self.body.pop()     # eliminar punta de la cola NOTA: tambien con esto se podría incrementar el tamaño, simplemente bypaseando la linea con grow_up con (if not grow_up)
         self.set_head_position(new_position)
         self.body.appendleft(new_position)
-        pass
+        
     
-
     def increment(self):
         # al incrementar, necesitamos añadir la posicion actual DE LA COLA
         self.long+=1
         tail_position=self.body[0]
         self.body.append(tail_position)
-        pass
+        
 
     def detect_colition(self, new_coordenate):
         if new_coordenate in self.body:
             raise ValueError("LA SERPIENTE HA CHOCADO CON SU PROPIO CUERPO!!!")
-        pass
+    
 
     
 
@@ -108,29 +124,12 @@ class boardObject:
         rows=["-" for i in range(row)]
         matrix=[rows.copy() for j in range(column)]
         return matrix
-    
-    def print_matrix_snake(self,snake: snakeObject=None):
-        # intenetar retornar un string y con _str_ formatear el print (pensar que hacer con snakeObject)
-
-        #   CAMBIAR ESTRATEGIA DE IMPRESION (esta no permite que la serpiente rebase los limites y vuelva)
-        x=len(self.matrix)
-        y=len(self.matrix[0])
-        for i in range(x):
-            for j in range(y):
-                coordenate=(i,j)
-                if coordenate in snake.body:
-                    print("S", end=" ")
-                else:
-                    print(self.matrix[i][j], end=" ")
-            print()
-
 
     # los metodos relacionados con las manzanas, es posible que toque colocarlos en un controlador a parte para evitar el acoplamiento
-
     def put_apple(self, quantity):
         for i in range(quantity):
-            random_x=random.randint(1,self.x-1)
-            random_y=random.randint(1,self.y-1)
+            random_x=random.randint(0,self.x-1)
+            random_y=random.randint(0,self.y-1)
 
             new_apple_coordenates=(random_x,random_y)
             self.apples_coordenates.add(new_apple_coordenates)
@@ -143,13 +142,39 @@ class boardObject:
 
 def detect_apple(board: boardObject, snake: snakeObject, direction: tuple):
     next_coordenates=snake._sum_vectors(snake.get_head_position(), snake.get_direction(direction))
-    should_grown = next_coordenates in board.apples_coordenates
+    should_grown=next_coordenates in board.apples_coordenates
     if should_grown:
         x,y=next_coordenates
         board.matrix[x][y]="-"
         board.apples_coordenates.remove(next_coordenates)
-
     return should_grown
+
+def print_matrix_snake(board: boardObject,snake: snakeObject=None):
+    x=len(board.matrix)
+    y=len(board.matrix[0])
+    for i in range(x):
+        for j in range(y):
+            coordenate=(i,j)
+            if coordenate in snake.body:
+                print("S", end=" ")
+            else:
+                print(board.matrix[i][j], end=" ")
+        print()
+
+
+def on_press(key):
+    global last_key
+    try: 
+        new_key=key.char.lower()
+        if new_key in ("w","a","s","d"):
+            last_key=new_key
+        print(f"key: {new_key}")
+    except AttributeError:
+        pass
+
+listener=keyboard.Listener(on_press=on_press)
+
+listener.start()
 
 def controller():
     #si en su proximo movimiento hay una manzana, crecer en uno
@@ -157,26 +182,32 @@ def controller():
     board=boardObject((10,10))
     snake=snakeObject()
 
-    board.put_apple(5)
+    board.put_apple(12)
 
     while True:
+        
         print(snake.body)
         print(f"apples = {board.apples_coordenates}")
         print(f"head = {snake.get_head_position()}")
         print(f"direction = {snake.current_direction}")
-        board.print_matrix_snake(snake)
+        # board.print_matrix_snake(snake)
+        
         
 
-        input_direction=input("(W A S D) >> ")
-        # grow_up=bool(int(input("1/0 >>")))
+        # input_direction=input("(W A S D) >> ")
+        #aqui, meter el listener de alguna forma
+        
 
-        grow=detect_apple(board,snake,input_direction)
+        should_grown=detect_apple(board,snake,last_key)
 
-        snake.move_to(input_direction, grow)
+        snake.move_to(last_key, should_grown)
+        print_matrix_snake(board, snake)
         # board.tmp_detect_apple(snake)
-        
+        time.sleep(0.2)
         os.system("cls")
         
+
+
 
 controller()
 
