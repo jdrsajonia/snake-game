@@ -3,12 +3,7 @@ import random
 import time
 from collections import deque
 
-keys={ 
-        "w":(-1,0),     # arriba
-        "a":(0,-1),     # izquierda
-        "s":(1,0),      # abajo
-        "d":(0,1)       # derecha
-        }
+
 
 class node:
     # probablemente quitar esta clase, ya que solo estamos trabajando con coordenadas
@@ -144,28 +139,7 @@ class boardObject:
         pass
 
     
-    # def tmp_detect_apple(self, snake: snakeObject=None):
-
-    #     head=snake.get_head_position()
-        
-    #     if head in self.apples_coordenates:
-    #         snake.increment()
-    #         self.apples_coordenates.remove(head)
-    #         x,y=head
-    #         self.matrix[x][y]="-"
-
-
-# def tmp_detect_apple(matrix: boardObject, snake: snakeObject=None):
-
-#         head=snake.get_head_position()
-#         current_direction=snake.current_direction
-#         next_coordenate=snake._sum_vectors(current_direction, next_coordenate)
-
-#         if next_coordenate in matrix.apples_coordenates:
-#             snake.increment()
-#             matrix.apples_coordenates.remove(next_coordenate)
-#             x,y=next_coordenate
-#             matrix.matrix[x][y]="-"
+  
 
 def detect_apple(board: boardObject, snake: snakeObject, direction: tuple):
     next_coordenates=snake._sum_vectors(snake.get_head_position(), snake.get_direction(direction))
@@ -173,6 +147,7 @@ def detect_apple(board: boardObject, snake: snakeObject, direction: tuple):
     if should_grown:
         x,y=next_coordenates
         board.matrix[x][y]="-"
+        board.apples_coordenates.remove(next_coordenates)
 
     return should_grown
 
