@@ -102,6 +102,14 @@ class boardObject:
         self.matrix=self._generate_matrix(self.y, self.x)
         self.apples_coordenates=set()
 
+        self.horizontal_character="="
+        self.vertical_character="|"
+        self.serpent_character="\033[95m■\033[0m"
+        self.apple_character="▫"
+        self.space_character=" "
+        self.borders_character="+"
+        self.horizontal_margin=self.borders_character+2*self.horizontal_character*(self.y)+self.borders_character
+
 
     @staticmethod
     def _generate_matrix(row:int,column:int):
@@ -129,4 +137,26 @@ class boardObject:
 
             self.apples_coordenates.add(new_apple_coordenates)
             # self.matrix[random_x][random_y]="▫"
-                
+    
+
+    def current_game(self, snake: snakeObject=None):
+
+        ascci_string=""
+
+
+        ascci_string+=self.horizontal_margin+"\n"
+
+        for i in range(self.x):
+            ascci_string+=self.vertical_character
+            for j in range(self.y):
+                coordenate=(i,j)
+                if coordenate in snake.body:
+                    ascci_string+=self.serpent_character+" "
+                elif coordenate in self.apples_coordenates:
+                    ascci_string+=self.apple_character+" "
+                else:
+                    ascci_string+=self.space_character+" "
+            ascci_string+=self.vertical_character+"\n"
+
+        ascci_string+=self.horizontal_margin+"\n"
+        return ascci_string

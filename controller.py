@@ -12,45 +12,10 @@ def detect_apple(board: boardObject, snake: snakeObject, direction: tuple):
     should_grown=next_coordenates in board.apples_coordenates
     if should_grown:
         x,y=next_coordenates
-        board.matrix[x][y]=" "
+        # board.matrix[x][y]=" "
         board.apples_coordenates.remove(next_coordenates)
         board.put_apple(2)
     return should_grown
-
-
-def print_matrix_snake(board: boardObject,snake: snakeObject=None):
-
-    ascci_string=""
-
-    y=len(board.matrix)
-    x=len(board.matrix[0])
-
-    horizontal_character="="
-    vertical_character="|"
-    serpent_character="\033[95m■\033[0m"
-    apple_character="▫"
-    space_character=" "
-    borders_character="+"
-    horizontal_margin=borders_character+2*horizontal_character*(x)+borders_character
-    
-    ascci_string+=horizontal_margin+"\n"
-
-    for i in range(y):
-        ascci_string+=vertical_character
-        for j in range(x):
-            coordenate=(i,j)
-            if coordenate in snake.body:
-                ascci_string+=serpent_character+" "
-            elif coordenate in board.apples_coordenates:
-                ascci_string+=apple_character+" "
-            else:
-                ascci_string+=space_character+" "
-        ascci_string+=vertical_character+"\n"
-
-    ascci_string+=horizontal_margin+"\n"
-    return ascci_string
-
-    
 
 
 def on_press(key):
@@ -69,7 +34,8 @@ listener.start()
 
 
 def controller():
-    system("cls")
+    # system("cls")
+    print("\033[H\033[J", end="")
     snake=snakeObject(DIMENSION)
     board=boardObject(DIMENSION)
     board.put_apple(2)
@@ -77,10 +43,13 @@ def controller():
     while True:
         should_grown=detect_apple(board,snake,last_key)
         snake.move_to(last_key, should_grown)
-        print(print_matrix_snake(board, snake))
+        print(f"Longitud: {snake.long}")
+        print(board.current_game(snake))
 
         sleep(0.3)
-        system("cls")
+        # system("cls")
+        print("\033[H\033[J", end="")  
+
 
 
 controller()
