@@ -3,35 +3,15 @@ import random
 import time
 from collections import deque
 
-
-
-def generate_matrix(row:int,column:int):
-    rows=["-" for i in range(row)]
-    matrix=[rows.copy() for j in range(column)]
-    return matrix
-
-def put_apple(matrix):
-
-    column=len(matrix)
-    row=len(matrix[0])
-
-    random_x=random.randint(1, column-1)
-    random_y=random.randint(1,row-1)
-    # apple=node(random_x,random_y)
-    # apple.set_type("W")
-    matrix[random_y][random_x]="W"
-
-def print_matrix(matrix):
-    x=len(matrix)
-    y=len(matrix[0])
-    for i in range(x):
-        for j in range(y):
-            print(matrix[i][j], end=" ")
-        print()
-
+keys={ 
+        "w":(-1,0),     # arriba
+        "a":(0,-1),     # izquierda
+        "s":(1,0),      # abajo
+        "d":(0,1)       # derecha
+        }
 
 class node:
-
+    # probablemente quitar esta clase, ya que solo estamos trabajando con coordenadas
     def __init__(self, position: tuple):
         self.type=None
         self.x, self.y = position
@@ -65,15 +45,18 @@ class snakeObject:
                     "s":(1,0),      # abajo
                     "d":(0,1)       # derecha
                     }
+        
+        self.current_direction=(0,1)
     
     @staticmethod
     def _sum_vectors(vector1:tuple, vector2:tuple):
-        new_vector = tuple(v1+v2 for v1, v2 in zip(vector1, vector2))
+        new_vector = tuple((v1+v2)%10 for v1, v2 in zip(vector1, vector2)) #AQUI SE PUEDE METER EL MODULO PARA ARREGLAR EL PROBLEMA DE LOS LIMITES
         return new_vector
     
 
     def get_direction(self, key:str):
-        return self.keys[key]
+        self.current_direction=self.keys[key]       # ver si separamos la logica del controlador con la de la serpiente
+        return self.current_direction
 
     def set_head_position(self, coordenates: tuple):
         self.head.set_position(coordenates)
@@ -81,15 +64,23 @@ class snakeObject:
     def get_head_position(self):
         return self.head.get_position()
     
-    def move_to(self, direction_key:str, crecer=False):
+
+    def detectar_manzana(): #??
+        pass
+
+    def move_to(self, direction_key:str, grow_up=False):
         actual_position=self.get_head_position()
-        # pedazo de codigo de prueba
-        if crecer:
+
+        current_direction=self.get_direction(direction_key) #la ultima direccion se actualiza aqui
+
+
+        # aqui se podría incrementar el tamaño
+        if grow_up:
             self.increment()
-            pass
-        # borrar despues 
-        new_position=self._sum_vectors(actual_position,self.keys[direction_key])
+
+        new_position=self._sum_vectors(actual_position,current_direction)
         self.detect_colition(new_position)
+        
         self.body.pop()     # eliminar punta de la cola
         self.set_head_position(new_position)
         self.body.appendleft(new_position)
@@ -125,6 +116,8 @@ class boardObject:
     
     def print_matrix_snake(self,snake: snakeObject=None):
         # intenetar retornar un string y con _str_ formatear el print (pensar que hacer con snakeObject)
+
+        #   CAMBIAR ESTRATEGIA DE IMPRESION (esta no permite que la serpiente rebase los limites y vuelva)
         x=len(self.matrix)
         y=len(self.matrix[0])
         for i in range(x):
@@ -137,6 +130,8 @@ class boardObject:
             print()
 
 
+    # los metodos relacionados con las manzanas, es posible que toque colocarlos en un controlador a parte para evitar el acoplamiento
+
     def put_apple(self, quantity):
         for i in range(quantity):
             random_x=random.randint(1,self.x-1)
@@ -148,21 +143,42 @@ class boardObject:
             self.matrix[random_x][random_y]="W"
         pass
 
+    
+    # def tmp_detect_apple(self, snake: snakeObject=None):
 
-    def tmp_detect_apple(self, snake: snakeObject=None):
-        head=snake.get_head_position()
-        if head in self.apples_coordenates:
-            snake.increment()
-            self.apples_coordenates.remove(head)
-            x,y=head
-            self.matrix[x][y]="-"
-
-        pass
-
-
+    #     head=snake.get_head_position()
+        
+    #     if head in self.apples_coordenates:
+    #         snake.increment()
+    #         self.apples_coordenates.remove(head)
+    #         x,y=head
+    #         self.matrix[x][y]="-"
 
 
-def move_test_v2():
+# def tmp_detect_apple(matrix: boardObject, snake: snakeObject=None):
+
+#         head=snake.get_head_position()
+#         current_direction=snake.current_direction
+#         next_coordenate=snake._sum_vectors(current_direction, next_coordenate)
+
+#         if next_coordenate in matrix.apples_coordenates:
+#             snake.increment()
+#             matrix.apples_coordenates.remove(next_coordenate)
+#             x,y=next_coordenate
+#             matrix.matrix[x][y]="-"
+
+def detect_apple(board: boardObject, snake: snakeObject, direction: tuple):
+    next_coordenates=snake._sum_vectors(snake.get_head_position(), snake.get_direction(direction))
+    should_grown = next_coordenates in board.apples_coordenates
+    if should_grown:
+        x,y=next_coordenates
+        board.matrix[x][y]="-"
+
+    return should_grown
+
+def controller():
+    #si en su proximo movimiento hay una manzana, crecer en uno
+    os.system("cls")
     board=boardObject((10,10))
     snake=snakeObject()
 
@@ -172,18 +188,21 @@ def move_test_v2():
         print(snake.body)
         print(f"apples = {board.apples_coordenates}")
         print(f"head = {snake.get_head_position()}")
+        print(f"direction = {snake.current_direction}")
         board.print_matrix_snake(snake)
-        board.tmp_detect_apple(snake)
-        input_direction=input("(W A S D) >> ")
         
-        snake.move_to(input_direction)
+
+        input_direction=input("(W A S D) >> ")
+        # grow_up=bool(int(input("1/0 >>")))
+
+        grow=detect_apple(board,snake,input_direction)
+
+        snake.move_to(input_direction, grow)
+        # board.tmp_detect_apple(snake)
         
         os.system("cls")
         
-    pass
 
-
-
-move_test_v2()
+controller()
 
 
