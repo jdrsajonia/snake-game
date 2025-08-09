@@ -23,7 +23,7 @@ def on_press(key):
         new_key=key.char.lower()
         if new_key in ("w","a","s","d"):
             last_key=new_key
-        print(f"key: {new_key}")
+        
     except AttributeError:
         pass
 
@@ -40,11 +40,11 @@ def controller():
     board.put_apple(2)
 
     while True:
-        print(snake.colition)
+        
         should_grown=detect_apple(board,snake,last_key)
         snake.move_to(last_key, should_grown)
-        print(f"Longitud: {snake.long}")
         print(board.str_current_game(snake))
+
         if snake.colition:
             print("\033[H\033[J", end="")
             board.serpent_character=board.colorize("x","b_red")
