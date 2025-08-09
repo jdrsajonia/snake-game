@@ -40,7 +40,7 @@ class snakeObject:
     @staticmethod
     def _sum_vectors(vector1:tuple, vector2:tuple):
         new_vector = tuple((v1+v2) for v1, v2 in zip(vector1, vector2)) 
-    
+        return new_vector
 
     def get_direction(self, key:str):
         new_direction=self.keys[key]  #!! controlador en la serpiente
