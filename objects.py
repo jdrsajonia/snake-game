@@ -35,15 +35,18 @@ class snakeObject:
                     }
         
         self.current_direction=(0,1)
+        self.colition=False
     
     @staticmethod
     def _sum_vectors(vector1:tuple, vector2:tuple):
-        new_vector = tuple((v1+v2) for v1, v2 in zip(vector1, vector2)) #AQUI SE PUEDE METER EL MODULO PARA ARREGLAR EL PROBLEMA DE LOS LIMITES
-        return new_vector
+        new_vector = tuple((v1+v2) for v1, v2 in zip(vector1, vector2)) 
     
 
     def get_direction(self, key:str):
-        self.current_direction=self.keys[key]  #!! controlador en la serpiente
+        new_direction=self.keys[key]  #!! controlador en la serpiente
+        if new_direction[0]==-self.current_direction[0] and new_direction[1]==-self.current_direction[1]:
+            return self.current_direction
+        self.current_direction=new_direction 
         return self.current_direction
 
 
@@ -69,7 +72,8 @@ class snakeObject:
 
     def detect_colition(self, new_coordenate):
         if new_coordenate in self.body:
-            raise ValueError("LA SERPIENTE HA CHOCADO CON SU PROPIO CUERPO!!!")
+            # raise ValueError("LA SERPIENTE HA CHOCADO CON SU PROPIO CUERPO!!!")
+            self.colition=True
 
     def move_to(self, direction_key:str, grow_up=False):
         actual_position=self.get_head_position()
@@ -89,8 +93,6 @@ class snakeObject:
         
 
     
-    
-
     
 
 
@@ -139,7 +141,7 @@ class boardObject:
             # self.matrix[random_x][random_y]="▫"
     
 
-    def current_game(self, snake: snakeObject=None):
+    def str_current_game(self, snake: snakeObject=None):
 
         ascci_string=""
 

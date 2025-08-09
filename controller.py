@@ -5,14 +5,13 @@ from pynput import keyboard
 
 last_key="d"
 
-DIMENSION=(11,20)
+DIMENSION=(11,30)
 
 def detect_apple(board: boardObject, snake: snakeObject, direction: tuple):
     next_coordenates=snake._sum_vectors(snake.get_head_position(), snake.get_direction(direction))
     should_grown=next_coordenates in board.apples_coordenates
     if should_grown:
         x,y=next_coordenates
-        # board.matrix[x][y]=" "
         board.apples_coordenates.remove(next_coordenates)
         board.put_apple(2)
     return should_grown
@@ -41,12 +40,16 @@ def controller():
     board.put_apple(2)
 
     while True:
+        print(snake.colition)
         should_grown=detect_apple(board,snake,last_key)
         snake.move_to(last_key, should_grown)
         print(f"Longitud: {snake.long}")
-        print(board.current_game(snake))
+        print(board.str_current_game(snake))
+        if snake.colition:
+            
+            break
 
-        sleep(0.3)
+        sleep(0.1)
         # system("cls")
         print("\033[H\033[J", end="")  
 
