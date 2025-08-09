@@ -46,7 +46,9 @@ def controller():
         print(f"Longitud: {snake.long}")
         print(board.str_current_game(snake))
         if snake.colition:
-            
+            print("\033[H\033[J", end="")
+            board.serpent_character=board.colorize("x","b_red")
+            print(board.str_current_game(snake))
             break
 
         sleep(0.1)

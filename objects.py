@@ -104,14 +104,44 @@ class boardObject:
         self.matrix=self._generate_matrix(self.y, self.x)
         self.apples_coordenates=set()
 
-        self.horizontal_character="="
-        self.vertical_character="|"
-        self.serpent_character="\033[95m■\033[0m"
-        self.apple_character="▫"
-        self.space_character=" "
-        self.borders_character="+"
+        self.is_colorized=True
+
+        self.colors = {
+            "black": 30,
+            "red": 31,
+            "green": 32,
+            "yellow": 33,
+            "blue": 34,
+            "magenta": 35,
+            "cyan": 36,
+            "white": 37,
+            "b_black": 90,
+            "b_red": 91,
+            "b_green": 92,
+            "b_yellow": 93,
+            "b_blue": 94,
+            "b_magenta": 95,
+            "b_cyan": 96,
+            "b_white": 97,
+            "":37
+        }
+
+        self.horizontal_character = self.colorize("=","")
+        self.vertical_character   = self.colorize("|","")
+        self.serpent_character    = self.colorize("■","magenta")
+        self.apple_character      = self.colorize("▫","green")
+        self.space_character      = " "
+        self.borders_character    = self.colorize("+","green")
+
+
+
         self.horizontal_margin=self.borders_character+2*self.horizontal_character*(self.y)+self.borders_character
 
+    def colorize(self, char: str, color:str):
+        if not self.is_colorized:
+            return char
+        color=str(self.colors[color])
+        return "\033["+color+"m"+char+"\033[0m"
 
     @staticmethod
     def _generate_matrix(row:int,column:int):
