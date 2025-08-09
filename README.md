@@ -6,7 +6,7 @@ Important instructions to follow!
 
     pip install -r requirements.txt
 
-or do
+or you can do
 
     
     pip install pynput
@@ -22,3 +22,13 @@ If you dont want to contaminate your system with dependencies, run follow comman
     env/Scripts/activate
     pip install pynput
     python controller.py
+
+
+DEFAULT CONTROLS!: 
+
+    W: up
+    A: left
+    S: down
+    D: right
+
+Enjoy it! 
