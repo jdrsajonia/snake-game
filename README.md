@@ -16,13 +16,13 @@ or you can do
     python controller.py
 
 
-If you dont want to contaminate your system with dependencies, run follow commands below:
+If you dont want to contaminate your system with dependencies (if you are Windows user) run follow commands below:
 
     python -m venv env
     env/Scripts/activate
     pip install pynput
     python controller.py
-
+Maybe i could do a .bat or .sh run executable to do this automatically
 
 DEFAULT CONTROLS!: 
 
