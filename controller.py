@@ -1,10 +1,11 @@
-from objects import snakeObject, boardObject
+from objects import snakeObject, spaceObject
 from time import sleep
 from pynput import keyboard
 
+
 last_key="d"
 
-DIMENSION=(11,30)
+DIMENSION=(15,40)
 
 def on_press(key):
     global last_key
@@ -28,25 +29,19 @@ def controller():
     # snake.set_controls("t","f","g","h")
 
     print(snake.keys)
-    board=boardObject(DIMENSION)
-    board.put_apple(2)
+    space=spaceObject(DIMENSION)
+    space.put_apple(2)
 
     while True: #probar si se pueden añadir mas serpientes y tableros
         
-        ##### tmp
-        # current_coordenate=snake.adjust_direction2(last_key)
-        # snake.set_current_direction(current_coordenate) # se actualiza la actual direccion de la serpiente
-
-        ##### tmp
-
-        should_grown=board.detect_apple(snake,last_key)
+        should_grown=space.detect_apple(snake,last_key)
         snake.move_to(last_key, should_grown) #esto define el ritmo del juego
-        print(board.str_current_game(snake))
+        print(space.render_str_game(snake))
         
         if snake.colition:
             print("\033[H\033[J", end="")
             snake.serpent_character=snake.colorize("x","b_red")
-            print(board.str_current_game(snake))
+            print(space.render_str_game(snake))
             break
 
         sleep(0.1)
@@ -55,3 +50,20 @@ def controller():
 
 
 controller()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

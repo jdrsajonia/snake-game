@@ -114,7 +114,7 @@ class snakeObject:
         self.body.appendleft(new_position)
         
     
-class boardObject:
+class spaceObject:
     
     def __init__(self,dimension):
         # self.matrix=self._generate_matrix(self.y, self.x)
@@ -125,8 +125,8 @@ class boardObject:
         # self.serpent_character    = self.colorize("■","magenta")
     
         self.char={
-            "h_line"            : self.colorize("=",""),
-            "v_line"            : self.colorize("|",""),
+            "h_line"            : self.colorize("═",""),
+            "v_line"            : self.colorize("║",""),
             "serpent"           : self.colorize("■","magenta"),
             "apple"             : self.colorize("▫","green"),
             "space"             : " ",
@@ -160,14 +160,7 @@ class boardObject:
         color=str(colors[color])
         return "\033["+color+"m"+char+"\033[0m"
 
-    # @staticmethod
-    # def _generate_matrix(row:int,column:int):
-    #     space=None
-
-    #     rows=[space for i in range(row)]
-    #     matrix=[rows.copy() for j in range(column)]
-    #     return matrix
-
+   
     # los metodos relacionados con las manzanas, es posible que toque colocarlos en un controlador a parte para evitar el acoplamiento
     def put_apple(self, quantity, coordenate_restrictions: set=None):
         for i in range(quantity):
@@ -184,10 +177,22 @@ class boardObject:
                     break
 
             self.apples_coordenates.add(new_apple_coordenates)
-            # self.matrix[random_x][random_y]="▫"
+
+
+
+    def detect_apple(self, snake: snakeObject, direction: str): 
+                                                                                #next coordenates se puede dejar como atributo de snake, y este atributo se puede rescatar aqui
+        next_coordenates=snake._sum_vectors(snake.get_head_position(), snake.adjust_direction(direction))
+        should_grown=next_coordenates in self.apples_coordenates
+        if should_grown:
+            # x,y=next_coordenates
+            self.apples_coordenates.remove(next_coordenates)
+            quantity_apples=randint(1,2)
+            self.put_apple(quantity_apples)
+        return should_grown
     
 
-    def str_current_game(self, snake: snakeObject=None): # metodo que renderiza la escena (ver si se puede separar de boardObject)
+    def render_str_game(self, snake: snakeObject=None): # metodo que renderiza la escena (ver si se puede separar de boardObject)
         ascci_string=""
         ascci_string+=self.horizontal_margin+"\n"
 
@@ -205,16 +210,3 @@ class boardObject:
 
         ascci_string+=self.horizontal_margin+"\n"
         return ascci_string
-    
-
-
-    def detect_apple(self, snake: snakeObject, direction: str): 
-                                                                                #next coordenates se puede dejar como atributo de snake, y este atributo se puede rescatar aqui
-        next_coordenates=snake._sum_vectors(snake.get_head_position(), snake.adjust_direction(direction))
-        should_grown=next_coordenates in self.apples_coordenates
-        if should_grown:
-            # x,y=next_coordenates
-            self.apples_coordenates.remove(next_coordenates)
-            quantity_apples=randint(1,2)
-            self.put_apple(quantity_apples)
-        return should_grown
