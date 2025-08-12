@@ -16,6 +16,7 @@ class menuObject:
         self.magenta = "\033[35m"
         self.light_green = "\033[92m"
         self.cian="\033[96m"
+        self.light_red="\033[91m"
         self.reset = "\033[0m"
         self.clear="\033[H\033[J"
 
@@ -182,14 +183,15 @@ class menuObject:
         game.start()
         
 
-        print(f"{self.cian}GAME FINISHED:{self.reset} \n{self.light_green}Score: {game.snake.long}{self.reset}\n{self.light_green}{self.light_green}[1]{self.reset} restart, {self.light_green}[0]{self.reset} back menu\n{self.reset}")
+        print(f"{self.light_red}¡GAME FINISHED!{self.reset} \n{self.light_green}Score: {game.snake.long}{self.reset}\n{self.light_green}{self.light_green}[1]{self.reset} restart, {self.light_green}[0]{self.reset} back menu\n{self.reset}")
         
         option=str(input(self._get_path_prompt(self.path)))
         match option:
             case "1":
                 self._game()          # se ejecuta a si mismo, no es necesario añadir al stack
-            case "0":
+            case _:
                 self._go_back_()
+            
 
 
     def start(self):
