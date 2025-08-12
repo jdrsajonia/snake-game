@@ -31,4 +31,6 @@ DEFAULT CONTROLS!:
     S: down
     D: right
 
+    Q: quit
+
 Enjoy it! 
