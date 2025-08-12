@@ -1,4 +1,4 @@
-from gameLogic import snakeGameObject, KeyboardController
+from snake_game import snakeGameObject, KeyboardController
 
 class menuObject:
 
@@ -7,8 +7,8 @@ class menuObject:
         self.stack=[]
         self.path=[]
 
-        self.properties={"dimension":(10,30), "speed": 8}
-        self.size_board="Small"
+        self.properties={"dimension":(15,30), "speed": 8}
+        self.size_board="Normal"
         self.speed="Normal"
 
         self._game_object=None
@@ -82,7 +82,6 @@ class menuObject:
         self.stack[-1]()
 
 
-
     def _init_menu(self):
         print(self.clear, end="") 
         print(self.banner3+self._get_str_properties()+self.menu_options)
@@ -125,11 +124,11 @@ class menuObject:
         option=str(input(self._get_path_prompt(self.path)))
         match option:
             case "1":
-                self.properties["dimension"]=(10,30)
+                self.properties["dimension"]=(10,15)
                 self.size_board="Small"
                 self._board_menu()
             case "2":
-                self.properties["dimension"]=(15,40)
+                self.properties["dimension"]=(15,30)
                 self.size_board="Middle"
                 self._board_menu()
             case "3":
@@ -152,7 +151,7 @@ class menuObject:
         option=str(input(self._get_path_prompt(self.path)))
         match option:
             case "1":
-                self.properties["speed"]=3
+                self.properties["speed"]=6
                 self.speed="Slow"
                 self._speed_menu()
             case "2":
@@ -176,34 +175,26 @@ class menuObject:
 
 
     def _game(self):
+        # este metodo tiene un fuerte acoplamiento. Ver como quitarlo proximamente
         print(self.clear, end="")
-        game=snakeGameObject(controller=KeyboardController())
-        game.set_properties(self.properties)
-
-        game.start()
+        snakegame=snakeGameObject(controller=KeyboardController())
+        snakegame.set_properties(self.properties)
+        snakegame.start()
         
-
-        print(f"{self.light_red}¡GAME FINISHED!{self.reset} \n{self.light_green}Score: {game.snake.long}{self.reset}\n{self.light_green}{self.light_green}[1]{self.reset} restart, {self.light_green}[0]{self.reset} back menu\n{self.reset}")
+        print(f"{self.light_red}¡GAME FINISHED!{self.reset} \n{self.light_green}Score: {snakegame.snake.long}{self.reset}\n{self.light_green}{self.light_green}[1]{self.reset} restart, {self.light_green}[0]{self.reset} back menu\n{self.reset}")
         
         option=str(input(self._get_path_prompt(self.path)))
         match option:
             case "1":
-                self._game()          # se ejecuta a si mismo, no es necesario añadir al stack
+                self._game()   
             case _:
                 self._go_back_()
             
-
-
     def start(self):
         self._go_to(self._init_menu, "menu")
 
 
-    def set_game(self,game_object):
-        self._game_object=game_object
-
-    # def set_properties(self, properties): ??? poner en la clase Juego
-    #     self.properties=properties
 
 
-menu=menuObject()
-menu.start()
+
+menuObject().start()

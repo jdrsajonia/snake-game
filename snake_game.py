@@ -1,35 +1,11 @@
-from objects import snakeObject, spaceObject
+from objects import snakeObject, spaceObject, KeyboardController
 from time import sleep
 from pynput import keyboard
-from math import sqrt
-
-
-class KeyboardController:
-    def __init__(self):
-        self.last_key="d"
-        self.listener=None
-        self.quit=False
-
-    def on_press(self,key):
-        try: 
-            new_key=key.char.lower()
-            if new_key in ("w","a","s","d"):
-                self.last_key=new_key
-            elif new_key=="q":
-                self.quit=True
-
-        except AttributeError:
-            pass
-    
-    def start(self):
-        self.listener=keyboard.Listener(on_press=self.on_press, suppress=True)
-        self.listener.start()
-
 
 
 class snakeGameObject:
     def __init__(self, controller : KeyboardController = None):
-        self.properties={"dimension":(10,20), "speed":6}
+        self.properties={"dimension":(10,20), "speed":8}
         
         self.snake=snakeObject(self.properties["dimension"])
         self.spaceboard=spaceObject(self.properties["dimension"])
@@ -41,7 +17,6 @@ class snakeGameObject:
         self.snake=snakeObject(self.properties["dimension"])
         self.spaceboard=spaceObject(self.properties["dimension"])
         
-
 
     def game_logic(self):
         clear="\033[H\033[J"
@@ -60,7 +35,7 @@ class snakeGameObject:
 
             if snake1.colition or self.controller.quit:
                 print(clear, end="")
-                snake1.serpent_character = snake1.colorize("x", "b_red")
+                snake1.change_serpent_char("x", "light_red")
                 print(space.render_str_game(snake1))
                 break
 
@@ -81,13 +56,10 @@ class snakeGameObject:
         sleep(y)
         pass
 
-    # 
 
 
 if __name__=="__main__":
-    
-    # controller_input=KeyboardController()
-    game=snakeGameObject()
+    game=snakeGameObject(controller=KeyboardController())
     game.start()
     
 

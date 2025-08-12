@@ -1,10 +1,37 @@
 from collections import deque
 from random import randint
-from time import sleep
+# from time import sleep
 from pynput import keyboard
 
+class colors:
+    def __init__(self):
+        self.is_colorized=True
 
+    def colorize(self, char: str, color:str):
+        colors = {
+            "black": 30,
+            "red": 31,
+            "green": 32,
+            "yellow": 33,
+            "blue": 34,
+            "magenta": 35,
+            "cyan": 36,
+            "white": 37,
+            "light_black": 90,
+            "light_red": 91,
+            "light_green": 92,
+            "light_yellow": 93,
+            "light_blue": 94,
+            "light_magenta": 95,
+            "light_cyan": 96,
+            "light_white": 97,
+            "":37
+        }
 
+        if not self.is_colorized:
+            return char
+        color=str(colors[color])
+        return "\033["+color+"m"+char+"\033[0m"
 
 class snakeObject:
     def __init__(self, warp_dimensions: tuple):
@@ -13,8 +40,7 @@ class snakeObject:
         self.head_position=(0,0)
         self.body.append(self.head_position)
 
-        self.is_colorized=True
-        self.serpent_character=self.colorize("■","magenta")
+        self.serpent_character=colors().colorize("■","magenta")
 
         self.warp_x, self.warp_y = warp_dimensions
 
@@ -29,31 +55,6 @@ class snakeObject:
         self.current_direction=(0,1)
         self.colition=False
         
-
-    def colorize(self, char: str, color:str):
-        colors = {
-            "black": 30,
-            "red": 31,
-            "green": 32,
-            "yellow": 33,
-            "blue": 34,
-            "magenta": 35,
-            "cyan": 36,
-            "white": 37,
-            "b_black": 90,
-            "b_red": 91,
-            "b_green": 92,
-            "b_yellow": 93,
-            "b_blue": 94,
-            "b_magenta": 95,
-            "b_cyan": 96,
-            "b_white": 97,
-            "":37
-        }
-        if not self.is_colorized:
-            return char
-        color=str(colors[color])
-        return "\033["+color+"m"+char+"\033[0m"
     
     @staticmethod
     def _sum_vectors(vector1:tuple, vector2:tuple):
@@ -83,7 +84,7 @@ class snakeObject:
         current_y=current_y%self.warp_y
         return current_x, current_y
     
-    
+
     def snake_colition(self):
         self.colition=True
 
@@ -109,7 +110,9 @@ class snakeObject:
         self.set_head_position(new_position)
         self.body.appendleft(new_position)
 
-    
+    def change_serpent_char(self,character, color):
+        self.serpent_character=colors().colorize(character,color)
+        
         
     
 class spaceObject:
@@ -118,39 +121,13 @@ class spaceObject:
         self.apples_coordenates=set()
         self.is_colorized=True
         self.char={
-            "h_line"            : self.colorize("═","white"),
-            "v_line"            : self.colorize("║","white"),
-            "apple"             : self.colorize("▫","green"),
+            "h_line"            : colors().colorize("═","white"),
+            "v_line"            : colors().colorize("║","white"),
+            "apple"             : colors().colorize("▫","green"),
             "space"             : " ",
-            "corner"            : self.colorize("+","green"),
+            "corner"            : colors().colorize("+","green"),
         }
         self.horizontal_margin=self.char["corner"]+2*self.char["h_line"]*(self.y)+self.char["corner"]
-
-
-    def colorize(self, char: str, color:str):
-        colors = {
-            "black": 30,
-            "red": 31,
-            "green": 32,
-            "yellow": 33,
-            "blue": 34,
-            "magenta": 35,
-            "cyan": 36,
-            "white": 37,
-            "b_black": 90,
-            "b_red": 91,
-            "b_green": 92,
-            "b_yellow": 93,
-            "b_blue": 94,
-            "b_magenta": 95,
-            "b_cyan": 96,
-            "b_white": 97,
-            "":37
-        }
-        if not self.is_colorized:
-            return char
-        color=str(colors[color])
-        return "\033["+color+"m"+char+"\033[0m"
 
    
     def put_apple(self, quantity, coordenate_restrictions: set=None):
@@ -199,3 +176,26 @@ class spaceObject:
 
         ascci_string+=self.horizontal_margin+"\n"
         return ascci_string
+    
+
+
+class KeyboardController:
+    def __init__(self):
+        self.last_key="d"
+        self.listener=None
+        self.quit=False
+
+    def on_press(self,key):
+        try: 
+            new_key=key.char.lower()
+            if new_key in ("w","a","s","d"):
+                self.last_key=new_key
+            elif new_key=="q":
+                self.quit=True
+
+        except AttributeError:
+            pass
+    
+    def start(self):
+        self.listener=keyboard.Listener(on_press=self.on_press, suppress=True)
+        self.listener.start()
