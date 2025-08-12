@@ -13,7 +13,7 @@ or you can do
 
 2.) execute controller.py file to initialize the game:
 
-    python controller.py
+    python main_menu.py
 
 
 If you dont want to contaminate your system with dependencies (if you are Windows user) run follow commands below:
@@ -21,7 +21,7 @@ If you dont want to contaminate your system with dependencies (if you are Window
     python -m venv env
     env/Scripts/activate
     pip install pynput
-    python controller.py
+    python main_menu.py
 Maybe i could do a .bat or .sh run executable to do this automatically
 
 DEFAULT CONTROLS!: 
