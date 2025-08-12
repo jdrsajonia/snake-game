@@ -49,7 +49,7 @@ class menuObject:
 {self.light_green}[1]{self.reset} Small board
 {self.light_green}[2]{self.reset} Middle board
 {self.light_green}[3]{self.reset} Big board
-{self.light_green}[4]{self.reset} Set custom (x,y) ¡NOT AVAILABLE!
+{self.light_green}[4]{self.reset} Set custom (x,y) ¡NOT AVAILABLE YET!
 
 {self.light_green}[0]{self.reset} Back
 """
@@ -58,7 +58,7 @@ class menuObject:
 {self.light_green}[1]{self.reset} Slow
 {self.light_green}[2]{self.reset} Normal
 {self.light_green}[3]{self.reset} Fast
-{self.light_green}[4]{self.reset} Set custom [1,10] ¡NOT AVAILABLE!
+{self.light_green}[4]{self.reset} Set custom [1,10] ¡NOT AVAILABLE YET!
 
 {self.light_green}[0]{self.reset} Back
 """

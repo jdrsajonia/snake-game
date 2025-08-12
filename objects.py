@@ -123,8 +123,8 @@ class spaceObject:
         self.char={
             "h_line"            : colors().colorize("═","white"),
             "v_line"            : colors().colorize("║","white"),
-            "apple"             : colors().colorize("▫","green"),
-            "space"             : " ",
+            "apple"             : colors().colorize("▪","green"),
+            "space"             : colors().colorize(" ",""),
             "corner"            : colors().colorize("+","green"),
         }
         self.horizontal_margin=self.char["corner"]+2*self.char["h_line"]*(self.y)+self.char["corner"]
