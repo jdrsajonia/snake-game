@@ -58,18 +58,26 @@ def main():
     dimensions=()
     speed=None
 
+
+
     def get_path_prompt(path : list):
         return rf"""{MAGENTA}[{"/".join(path)+"] >> "}{RESET}"""
+
+
 
     def go_to(function, label : str):
         stack.append(function)
         path.append(label)
         function()
 
+
+
     def go_back():
         path.pop()
         stack.pop()
         stack[-1]()
+
+
 
     def init_menu():
         print(CLEAR, end="") 
@@ -78,11 +86,14 @@ def main():
         option=int(input(get_path_prompt(path)))
         match option:
             case 1:
+                go_to(game, "in game")
                 pass # iniciar aqui el juego de la serpiente
             case 2:
                 go_to(options_menu, "options")
             case 3:
                 exit()
+
+
 
     def options_menu():
         print(CLEAR, end="") 
@@ -97,6 +108,8 @@ def main():
             case 0:
                 go_back()
     
+
+
     def board_menu():
         print(CLEAR, end="") 
         print(banner3+change_dimenions)
@@ -105,10 +118,13 @@ def main():
         match option:
             case 1:
                 dimensions=(10,20)
+                board_menu()
             case 2:
                 dimensions=(15,30)
+                board_menu()
             case 3:
                 dimensions=(20,40)
+                board_menu()
             case 4:
                 pass # meter aqui la opcion de board custom 
 
@@ -123,23 +139,39 @@ def main():
         option=int(input(get_path_prompt(path)))
         match option:
             case 1:
-                pass
+                # meter valor de speed
+                speed_menu()
             case 2:
-                pass
+                # meter valor de speed
+                speed_menu()
             case 3:
-                pass
+                # meter valor de speed
+                speed_menu()
             case 4:
-                pass # meter aqui la opcion de board custom 
-
+                pass # meter aqui la opcion de speed custom 
             case 0:
                 go_back()
 
-    
+
+    def game():
+        print(CLEAR, end="")
+
+        print("game started")
+        # import controller
+        print("game FINISHED: [1] restart, [0] back menu")
+        #ejecutar juego como funcion
+        option=int(input(get_path_prompt(path)))
+
+        match option:
+            case 1:
+                game()          # se ejecuta a si mismo, no es necesario añadir al stack
+            case 0:
+                go_back()
+
+
     go_to(init_menu, "menu")
-    print("game started")
-    # import controller
-    print("game FINISHED: [1] restart, [0] back menu")
-    option=int(input(">> "))
+    
+    
 
     
 
