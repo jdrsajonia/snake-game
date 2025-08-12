@@ -25,10 +25,6 @@ listener.start()
 def controller():
     print("\033[H\033[J", end="")
     snake=snakeObject(DIMENSION)
-    print(snake.keys)
-    # snake.set_controls("t","f","g","h")
-
-    print(snake.keys)
     space=spaceObject(DIMENSION)
     space.put_apple(2)
 

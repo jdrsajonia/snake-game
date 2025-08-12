@@ -1,10 +1,13 @@
 from collections import deque
 from random import randint
+from time import sleep
+from pynput import keyboard
+
+
 
 
 class snakeObject:
     def __init__(self, warp_dimensions: tuple):
-
         self.long=1
         self.body=deque()
         self.head_position=(0,0)
@@ -16,26 +19,16 @@ class snakeObject:
         self.warp_x, self.warp_y = warp_dimensions
 
         self.up, self.left, self.down, self.right = ("w", "a", "s", "d")
-
         self.keys={ 
                     self.up:(-1,0),     
                     self.left:(0,-1),   
                     self.down:(1,0),      
-                    self.right:(0,1)       
+                    self.right:(0,1),  
                     }
         
         self.current_direction=(0,1)
         self.colition=False
-    
-
-    # def set_controls(self,up, left, down, right):
-    #     self.up, self.left, self.down, self.right = up, left, down, right
-    #     self.keys={ 
-    #                 self.up:(-1,0),     
-    #                 self.left:(0,-1),    
-    #                 self.down:(1,0),      
-    #                 self.right:(0,1)       
-    #                 }
+        
 
     def colorize(self, char: str, color:str):
         colors = {
@@ -90,16 +83,19 @@ class snakeObject:
         current_y=current_y%self.warp_y
         return current_x, current_y
     
+    
+    def snake_colition(self):
+        self.colition=True
+
 
     def detect_colition(self, new_coordenate):
         if new_coordenate in self.body:
             self.colition=True
 
 
-    def move_to(self, direction_key:str, grow_up=False):
+    def move_to(self, direction_key:str, grow_up=False): 
         actual_position=self.get_head_position()
         current_direction=self.adjust_direction(direction_key) 
-
         new_position=self._sum_vectors(actual_position,current_direction)
 
         new_position=self._normalize_position(new_position)
@@ -112,28 +108,24 @@ class snakeObject:
 
         self.set_head_position(new_position)
         self.body.appendleft(new_position)
+
+    
         
     
 class spaceObject:
-    
     def __init__(self,dimension):
-        # self.matrix=self._generate_matrix(self.y, self.x)
         self.x, self.y = dimension
         self.apples_coordenates=set()
         self.is_colorized=True
-
-        # self.serpent_character    = self.colorize("■","magenta")
-    
         self.char={
-            "h_line"            : self.colorize("═",""),
-            "v_line"            : self.colorize("║",""),
-            "serpent"           : self.colorize("■","magenta"),
+            "h_line"            : self.colorize("═","white"),
+            "v_line"            : self.colorize("║","white"),
             "apple"             : self.colorize("▫","green"),
             "space"             : " ",
             "corner"            : self.colorize("+","green"),
         }
-
         self.horizontal_margin=self.char["corner"]+2*self.char["h_line"]*(self.y)+self.char["corner"]
+
 
     def colorize(self, char: str, color:str):
         colors = {
@@ -161,7 +153,6 @@ class spaceObject:
         return "\033["+color+"m"+char+"\033[0m"
 
    
-    # los metodos relacionados con las manzanas, es posible que toque colocarlos en un controlador a parte para evitar el acoplamiento
     def put_apple(self, quantity, coordenate_restrictions: set=None):
         for i in range(quantity):
             if coordenate_restrictions==None:
@@ -179,20 +170,18 @@ class spaceObject:
             self.apples_coordenates.add(new_apple_coordenates)
 
 
-
     def detect_apple(self, snake: snakeObject, direction: str): 
-                                                                                #next coordenates se puede dejar como atributo de snake, y este atributo se puede rescatar aqui
+        #next coordenates se puede dejar como atributo de snake, y este atributo se puede rescatar aqui
         next_coordenates=snake._sum_vectors(snake.get_head_position(), snake.adjust_direction(direction))
         should_grown=next_coordenates in self.apples_coordenates
         if should_grown:
-            # x,y=next_coordenates
             self.apples_coordenates.remove(next_coordenates)
             quantity_apples=randint(1,2)
             self.put_apple(quantity_apples)
         return should_grown
     
 
-    def render_str_game(self, snake: snakeObject=None): # metodo que renderiza la escena (ver si se puede separar de boardObject)
+    def render_str_game(self, snake: snakeObject=None): 
         ascci_string=""
         ascci_string+=self.horizontal_margin+"\n"
 
