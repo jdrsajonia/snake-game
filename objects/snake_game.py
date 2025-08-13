@@ -1,6 +1,6 @@
-from objects import snakeObject, spaceObject, KeyboardController
+from .entities import snakeObject, spaceObject
+from .controller import KeyboardController
 from time import sleep
-from pynput import keyboard
 
 class snakeGameObject:
     def __init__(self, controller : KeyboardController = None):
@@ -36,7 +36,7 @@ class snakeGameObject:
             snake1.move_to(self.controller.last_key, should_grown)
             print(space.render_str_game(snake1))
 
-            if snake1.colition or self.controller.quit:
+            if snake1.collision or self.controller.quit:
                 print(clear, end="")
                 snake1.change_serpent_char("x", "light_red")
                 print(space.render_str_game(snake1))
@@ -44,6 +44,7 @@ class snakeGameObject:
 
             self.speed(speed_level)                     
             print(clear, end="")
+
         print(f"{light_red}¡GAME FINISHED!{reset} \n{light_green}Score: {snake1.long}{reset}\n{light_green}")
 
     def start(self):

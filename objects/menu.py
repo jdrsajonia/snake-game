@@ -41,7 +41,7 @@ class menuObject:
 
 {self.light_green}[0]{self.reset} Back
 """
-
+        
         self.change_dimenions=rf"""
 {self.light_green}[1]{self.reset} Small board
 {self.light_green}[2]{self.reset} Middle board
@@ -64,8 +64,10 @@ class menuObject:
     def _get_path_prompt(self,path : list):
         return rf"""{self.magenta}[{"/".join(path)+"] >> "}{self.reset}"""
 
+
     def _get_str_properties(self):
         return rf"""{self.cian}[Board: {self.size_board}] [Speed: {self.speed}]{self.reset}"""
+
 
     def _go_to(self,function, label : str):
         self.stack.append(function)
@@ -95,7 +97,6 @@ class menuObject:
                 self._init_menu()
 
 
-
     def _options_menu(self):
         print(self.clear, end="") 
         print(self.banner3+self._get_str_properties()+self._game_options)
@@ -111,7 +112,6 @@ class menuObject:
             case _: 
                 self._options_menu() 
     
-
 
     def _board_menu(self):
         print(self.clear, end="") 
@@ -184,9 +184,11 @@ class menuObject:
             case _:
                 self._go_back_()
 
+
     def set_game(self,function):
         self._game_object=function
         
+
     def start(self):
         self._go_to(self._init_menu, "menu")
 

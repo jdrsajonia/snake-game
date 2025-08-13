@@ -1,6 +1,6 @@
-from main_menu import menuObject
-from snake_game import snakeGameObject
-from objects import KeyboardController
+from objects.menu import menuObject
+from objects.snake_game import snakeGameObject
+from objects.controller import KeyboardController
 
 menu=menuObject()
 
