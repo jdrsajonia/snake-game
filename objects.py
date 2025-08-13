@@ -1,6 +1,5 @@
 from collections import deque
 from random import randint
-# from time import sleep
 from pynput import keyboard
 
 class colors:
@@ -32,6 +31,7 @@ class colors:
             return char
         color=str(colors[color])
         return "\033["+color+"m"+char+"\033[0m"
+
 
 class snakeObject:
     def __init__(self, warp_dimensions: tuple):

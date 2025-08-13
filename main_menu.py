@@ -1,7 +1,4 @@
-from snake_game import snakeGameObject, KeyboardController
-
 class menuObject:
-
     def __init__(self):
 
         self.stack=[]
@@ -90,7 +87,6 @@ class menuObject:
         match option:
             case "1":
                 self._go_to(self._game, "in game")
-                pass # iniciar aqui el juego de la serpiente
             case "2":
                 self._go_to(self._options_menu, "settings")
             case "3":
@@ -175,26 +171,23 @@ class menuObject:
 
 
     def _game(self):
-        # este metodo tiene un fuerte acoplamiento. Ver como quitarlo proximamente
         print(self.clear, end="")
-        snakegame=snakeGameObject(controller=KeyboardController())
-        snakegame.set_properties(self.properties)
-        snakegame.start()
+          
+        if self._game_object!=None:
+            self._game_object()
         
-        print(f"{self.light_red}¡GAME FINISHED!{self.reset} \n{self.light_green}Score: {snakegame.snake.long}{self.reset}\n{self.light_green}{self.light_green}[1]{self.reset} restart, {self.light_green}[0]{self.reset} back menu\n{self.reset}")
-        
+        print(rf"{self.light_green}[1]{self.reset} restart  {self.light_green}[0]{self.reset} back menu{self.reset}")
         option=str(input(self._get_path_prompt(self.path)))
         match option:
             case "1":
                 self._game()   
             case _:
                 self._go_back_()
-            
+
+    def set_game(self,function):
+        self._game_object=function
+        
     def start(self):
         self._go_to(self._init_menu, "menu")
 
 
-
-
-
-menuObject().start()

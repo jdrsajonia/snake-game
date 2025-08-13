@@ -2,7 +2,6 @@ from objects import snakeObject, spaceObject, KeyboardController
 from time import sleep
 from pynput import keyboard
 
-
 class snakeGameObject:
     def __init__(self, controller : KeyboardController = None):
         self.properties={"dimension":(10,20), "speed":8}
@@ -20,6 +19,10 @@ class snakeGameObject:
 
     def game_logic(self):
         clear="\033[H\033[J"
+        
+        light_green = "\033[92m"
+        light_red="\033[91m"
+        reset = "\033[0m"
         
         print(clear, end="")
 
@@ -41,7 +44,7 @@ class snakeGameObject:
 
             self.speed(speed_level)                     
             print(clear, end="")
-
+        print(f"{light_red}¡GAME FINISHED!{reset} \n{light_green}Score: {snake1.long}{reset}\n{light_green}")
 
     def start(self):
         self.controller.start()
@@ -55,7 +58,6 @@ class snakeGameObject:
         y=-x/17+0.65
         sleep(y)
         pass
-
 
 
 if __name__=="__main__":
