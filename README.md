@@ -1,5 +1,6 @@
-This README is ugly right now. I promise you it will be better.
 # Welcome to SnakyPy
+
+an Improvised terminal's Snake Game including its own main menu with settings and more. Checkout how to install it and try your best playing!
 
 ![banner](img/snakypy_banner.png)
 
