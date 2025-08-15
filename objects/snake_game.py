@@ -53,7 +53,7 @@ class snakeGameObject:
         self.controller.listener.stop()
        
     
-    def speed(self, x : list):
+    def speed(self, x : int):
         if not x in range(1,11):
             return sleep(0.1)
         y=-x/17+0.65
