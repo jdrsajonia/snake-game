@@ -3,7 +3,11 @@ This README is ugly right now. I promise you it will be better.
 
 ![banner](img/snakypy_banner.png)
 
-<img src="img/snake-demo.gif" width='480' />
+
+<p align="center">
+    <img src="img/snake-demo.gif" width='480' />
+</p>
+
 
 Important instructions to follow!
 
