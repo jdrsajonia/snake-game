@@ -1,6 +1,6 @@
 # Welcome to SnakyPy 🐍
 
-SnakyPy is an Improvised terminal's Snake Game made in Python, including its own main menu with settings and more. 
+**SnakyPy** is an Improvised terminal's Snake Game made in Python, including its own main menu with settings and more. 
 Checkout how to install it and try your best playing!
 
 ![banner](img/snakypy_banner.png)
