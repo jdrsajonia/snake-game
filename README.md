@@ -1,9 +1,9 @@
 This README is ugly right now. I promise you it will be better.
 # Welcome to SnakyPy
 
-![banner][img/snakypy_banner.png]
+![banner](img/snakypy_banner.png)
 
-![demo][img/snake-demo.gif]
+![demo](img/snake-demo.gif)
 
 Important instructions to follow!
 
