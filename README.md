@@ -17,7 +17,7 @@ Checkout how to install it and try your best playing!
 
 ### Requirements
 
-- Python 3.10 or higher (menu.py uses match cases)
+- Python 3.10 or higher (menu.py use match cases)
 - [`pynput`](https://pypi.org/project/pynput/) library (included in `requirements.txt`)
 
 
@@ -27,7 +27,7 @@ Checkout how to install it and try your best playing!
 - **Windows users:** If your terminal doesn't support ANSI escape codes, install `colorama` and initialize it in `main.py`:  
   ```bash
   pip install colorama
-- If you're running a Linux system, make sure to have an X-server started to detect the Keyboard (feature done automatically when you start GUI session)
+- If you're running a Linux system, make sure to have an X-server started to detect the Keyboard and avoid unexpected errors (feature done automatically when you start GUI session)
 
 ## 💻 How to Run
 
