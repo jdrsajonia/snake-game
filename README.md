@@ -1,40 +1,55 @@
 # Welcome to SnakyPy
 
-an Improvised terminal's Snake Game including its own main menu with settings and more. Checkout how to install it and try your best playing!
+SnakyPy is an Improvised terminal's Snake Game made in Python, including its own main menu with settings and more. 
+Checkout how to install it and try your best playing!
 
 ![banner](img/snakypy_banner.png)
 
+--- 
 
 <p align="center">
     <img src="img/snake-demo.gif" width='480' />
 </p>
 
+---
 
-Important instructions to follow!
+## Game Installation
 
-1.) Install dependencies indicated in requirements.txt with:
+### Requirements
+
+- Python 3.10 or higher
+- 'pynput' library (listed in 'requirements.txt')
+
+
+### Note:
+
+- If you PC doesn´t support ANSI colors you will need to  install and init 'colorama' module at the main.py. Do it with >> **pip install colorama**
+- If you're running a Linux system, make sure to have an X-server started to detect the Keyboard (feature done automatically when you start GUI session)
+
+
+
+### 1. Install dependencies indicated in requirements.txt with:
 
     pip install -r requirements.txt
 
-or you can do
+or you can do manually
 
     
     pip install pynput
 
-2.) execute controller.py file to initialize the game:
+### 2. Execute main.py file to initialize the game:
 
     python main.py
 
 
-If you dont want to contaminate your system with dependencies (if you are Windows user) run follow commands below:
+If you wanna bypass the menu feature and just play, go to /objects and execute snake_game.py file with:
 
-    python -m venv env
-    env/Scripts/activate
-    pip install pynput
-    python main.py
+    python snake_game.py
+
+   
 Maybe i could do a .bat or .sh run executable to do this automatically
 
-DEFAULT CONTROLS!: 
+## DEFAULT CONTROLS!: 
 
     W: up
     A: left
@@ -44,3 +59,5 @@ DEFAULT CONTROLS!:
     Q: quit
 
 Enjoy it! 
+
+---
