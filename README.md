@@ -56,7 +56,7 @@ Maybe i could do a .bat or .sh run executable to do this automatically
     S: down
     D: right
 
-    Q: quit
+    Q: kill snake
 
 Enjoy it! 
 
