@@ -17,7 +17,7 @@ Checkout how to install it and try your best playing!
 
 ### Requirements
 
-- Python 3.10 or higher
+- Python 3.10 or higher (menu.py uses match cases)
 - [`pynput`](https://pypi.org/project/pynput/) library (included in `requirements.txt`)
 
 
