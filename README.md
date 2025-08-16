@@ -40,9 +40,9 @@ Or manually:
     
     pip install pynput
 
-### 2. Execute main.py file to initialize the game:
+### 2. Execute snaky.py file to initialize the game:
 
-    python main.py
+    python snaky.py
 
 
 ### ▶️ Skip the menu
