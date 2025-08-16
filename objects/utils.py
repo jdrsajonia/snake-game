@@ -1,7 +1,7 @@
 class colors:
     def __init__(self):
         self.is_colorized=True
-
+    
     def colorize(self, char: str, color:str):
         colors = {
             "black": 30,

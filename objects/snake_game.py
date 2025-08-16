@@ -45,7 +45,7 @@ class snakeGameObject:
             self.speed(speed_level)                     
             print(clear, end="")
 
-        print(f"{light_red}¡GAME FINISHED!{reset} \n{light_green}Score: {snake1.long}{reset}\n{light_green}")
+        print(f"{light_red}¡GAME FINISHED!{reset} \n{light_green}Score: {snake1.long}{reset}\n")
 
     def start(self):
         self.controller.start()

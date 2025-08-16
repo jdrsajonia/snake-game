@@ -46,9 +46,9 @@ Or manually:
 
 
 ### ▶️ Skip the menu
-If you wanna bypass the menu feature and just play, go to /objects and execute snake_game.py file with:
+If you wanna bypass the menu feature and just play, execute snake_game.py file with:
 
-    python snake_game.py
+    python -m objects.snake_game.py
 
    
 Maybe i could do a .bat or .sh run executable to do this automatically

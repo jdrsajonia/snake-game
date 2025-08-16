@@ -19,6 +19,9 @@ class snakeObject:
                     self.down:(1,0),      
                     self.right:(0,1),  
                     }
+        
+        self.last_key="d"
+
         self.current_direction=(0,1)
         self.collision=False
         
@@ -53,21 +56,25 @@ class snakeObject:
         return current_x, current_y
     
 
-    def snake_collision(self):
-        self.collision=True
-
+    
 
     def detect_collision(self, new_coordinate):
         if new_coordinate in self.body:
             self.collision=True
+            
 
 
-    def move_to(self, direction_key:str, grow_up=False): 
+    def next_coordinate(self,direction_key):
+        
         actual_position=self.get_head_position()
         current_direction=self.adjust_direction(direction_key) 
         new_position=self._sum_vectors(actual_position,current_direction)
-
         new_position=self._normalize_position(new_position)
+        return new_position
+
+    def move_to(self, direction_key:str, grow_up=False): 
+        
+        new_position=self.next_coordinate(direction_key)
         self.detect_collision(new_position)
         if not grow_up:
             self.body.pop()     # crece = no elimina su cola al moverse
@@ -116,8 +123,8 @@ class spaceObject:
 
 
     def detect_apple(self, snake: snakeObject, direction: str): 
-        #next coordinates se puede dejar como atributo de snake, y este atributo se puede rescatar aqui
-        next_coordinates=snake._sum_vectors(snake.get_head_position(), snake.adjust_direction(direction))
+
+        next_coordinates=snake.next_coordinate(direction)
         should_grown=next_coordinates in self.apples_coordinates
         if should_grown:
             self.apples_coordinates.remove(next_coordinates)
