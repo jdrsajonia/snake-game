@@ -48,7 +48,7 @@ Or manually:
 ### ▶️ Skip the menu
 If you wanna bypass the menu feature and just play, execute snake_game.py file with:
 
-    python -m objects.snake_game.py
+    python -m objects.snake_game
 
    
 Maybe i could do a .bat or .sh run executable to do this automatically
